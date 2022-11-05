@@ -9,7 +9,12 @@
 
   ],
   "operatingsystem_support": [
-
+    {
+        "operatingsystem": "Ubuntu"
+    },
+    {
+        "operatingsystem": "Archlinux"
+    }
   ],
   "requirements": [
     {
