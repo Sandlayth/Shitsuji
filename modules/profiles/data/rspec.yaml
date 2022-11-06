@@ -1,0 +1,8 @@
+---
+users:
+    - name: foo
+      ensure: present
+      shell: '/usr/bin/bash'
+    - name: bar
+      ensure: absent
+      shell: '/usr/bin/bash'
