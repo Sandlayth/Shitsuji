@@ -3,4 +3,5 @@ users:
     - name: sandlayth
       ensure: present
       admin: true
+      shell: /usr/bin/bash
       dotfiles: "https://github.com/Sandlayth/dotfiles"
