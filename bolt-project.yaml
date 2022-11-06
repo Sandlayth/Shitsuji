@@ -1,3 +1,4 @@
 ---
 name: shitsuji
-modules: []
+modules:
+- saz/sudo

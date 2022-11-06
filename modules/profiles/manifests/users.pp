@@ -6,6 +6,8 @@
 # @example
 #   include profiles::users
 class profiles::users {
+  class { 'sudo': }
+
   $users = lookup('users')
 
   $users.each |$user| {
@@ -14,6 +16,14 @@ class profiles::users {
       name       => $user['name'],
       managehome => $user['ensure'] == 'present', # never deletes home
       shell      => $user['shell'],
+    }
+    $ensure_sudo = $user['admin'] ? {
+      true    => $user['ensure'],
+      default => 'absent',
+    }
+    sudo::conf { "sudo-${user['name']}":
+      ensure  => $ensure_sudo,
+      content => "${user['name']} ALL=(ALL) NOPASSWD: ALL",
     }
   }
 }

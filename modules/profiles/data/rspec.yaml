@@ -2,7 +2,17 @@
 users:
     - name: foo
       ensure: present
+      admin: true
       shell: '/usr/bin/bash'
     - name: bar
       ensure: absent
+      admin: false
+      shell: '/usr/bin/bash'
+    - name: baz
+      ensure: absent
+      admin: false
+      shell: '/usr/bin/bash'
+    - name: fuu
+      ensure: present
+      admin: false
       shell: '/usr/bin/bash'
