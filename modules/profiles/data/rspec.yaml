@@ -4,6 +4,7 @@ users:
       ensure: present
       admin: true
       shell: '/usr/bin/bash'
+      dotfiles: 'test'
     - name: bar
       ensure: absent
       admin: false
@@ -12,6 +13,7 @@ users:
       ensure: absent
       admin: false
       shell: '/usr/bin/bash'
+      dotfiles: 'test'
     - name: fuu
       ensure: present
       admin: false

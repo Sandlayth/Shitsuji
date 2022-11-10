@@ -25,5 +25,22 @@ class profiles::users {
       ensure  => $ensure_sudo,
       content => "${user['name']} ALL=(ALL) NOPASSWD: ALL",
     }
+    if $user['ensure'] == 'present' and $user['dotfiles'] != undef {
+      $home = "/home/${user['name']}"
+
+      exec { "dotfiles-clone-${user['name']}":
+        path    => '/usr/bin',
+        command => "git clone --bare ${user['dotfiles']} ${home}/.dotfiles",
+        user    => $user['name'],
+        creates => "${home}/.dotfiles",
+        require => User["user-${user['name']}"],
+      }
+      exec { "dotfiles-pull-${user['name']}":
+        path    => '/usr/bin',
+        command => "git --git-dir=${home}/.dotfiles/ --work-tree=${home} pull",
+        user    => $user['name'],
+        onlyif  => "/usr/bin/test -d ${home}/.dotfiles",
+      }
+    }
   }
 }

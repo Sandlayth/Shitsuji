@@ -20,6 +20,16 @@ describe 'profiles::users' do
         is_expected.to contain_sudo__conf('sudo-foo')
           .with(ensure: 'present')
           .with(content: 'foo ALL=(ALL) NOPASSWD: ALL')
+        is_expected.to contain_exec('dotfiles-clone-foo')
+          .with(path: '/usr/bin')
+          .with(command: 'git clone --bare test /home/foo/.dotfiles')
+          .with(user: 'foo')
+          .with(creates: '/home/foo/.dotfiles')
+        is_expected.to contain_exec('dotfiles-pull-foo')
+          .with(path: '/usr/bin')
+          .with(command: 'git --git-dir=/home/foo/.dotfiles/ --work-tree=/home/foo pull')
+          .with(user: 'foo')
+          .with(onlyif: '/usr/bin/test -d /home/foo/.dotfiles')
       }
       it {
         is_expected.to contain_user('user-bar')
@@ -29,6 +39,8 @@ describe 'profiles::users' do
           .with(shell: '/usr/bin/bash')
         is_expected.to contain_sudo__conf('sudo-bar')
           .with(ensure: 'absent')
+        is_expected.not_to contain_exec('dotfiles-clone-bar')
+        is_expected.not_to contain_exec('dotfiles-pull-bar')
       }
       it {
         is_expected.to contain_user('user-baz')
@@ -38,6 +50,8 @@ describe 'profiles::users' do
           .with(shell: '/usr/bin/bash')
         is_expected.to contain_sudo__conf('sudo-baz')
           .with(ensure: 'absent')
+        is_expected.not_to contain_exec('dotfiles-clone-baz')
+        is_expected.not_to contain_exec('dotfiles-pull-baz')
       }
       it {
         is_expected.to contain_user('user-fuu')
@@ -47,6 +61,8 @@ describe 'profiles::users' do
           .with(shell: '/usr/bin/bash')
         is_expected.to contain_sudo__conf('sudo-fuu')
           .with(ensure: 'absent')
+        is_expected.not_to contain_exec('dotfiles-clone-fuu')
+        is_expected.not_to contain_exec('dotfiles-pull-fuu')
       }
     end
   end
