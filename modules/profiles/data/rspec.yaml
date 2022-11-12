@@ -18,3 +18,11 @@ users:
       ensure: present
       admin: false
       shell: '/usr/bin/bash'
+
+desktop_packages:
+    - name: 'package_present'
+    - name: 'package_absent'
+      ensure: 'absent'
+    - name: 'package_options'
+      ensure: 'present'
+      source: 'package_source'
