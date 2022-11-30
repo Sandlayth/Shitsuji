@@ -19,6 +19,14 @@ users:
       admin: false
       shell: '/usr/bin/bash'
 
+base_packages:
+    - name: 'package_present'
+    - name: 'package_absent'
+      ensure: 'absent'
+    - name: 'package_options'
+      ensure: 'present'
+      source: 'package_source'
+
 desktop_packages:
     - name: 'package_present'
     - name: 'package_absent'
