@@ -4,13 +4,10 @@
 #   include profiles::base
 class profiles::base {
   $packages = lookup('base_packages')
-
-  $packages.each |$package| {
-    package { default:
+  $default_options = {
       ensure => 'present',
-      ;
-      $package['name']:
-        * => $package,
-    }
+  }
+  $packages.each |$package| {
+    ensure_resource('package', $package['name'], $default_options + $package)
   }
 }

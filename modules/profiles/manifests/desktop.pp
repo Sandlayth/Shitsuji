@@ -4,13 +4,10 @@
 #   include profiles::desktop
 class profiles::desktop {
   $packages = lookup('desktop_packages')
-
-  $packages.each |$package| {
-    package { default:
+  $default_options = {
       ensure => 'present',
-      ;
-      $package['name']:
-        * => $package,
-    }
+  }
+  $packages.each |$package| {
+    ensure_resource('package', $package['name'], $default_options + $package)
   }
 }
