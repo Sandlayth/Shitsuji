@@ -5,9 +5,13 @@
 class profiles::base {
   $packages = lookup('base_packages')
   $default_options = {
-      ensure => 'present',
+      ensure => 'installed',
   }
   $packages.each |$package| {
-    ensure_resource('package', $package['name'], $default_options + $package)
+    if ($package['command']) {
+      ensure_resource('exec', "install_${package['name']}", $package - ['name', 'ensure'])
+    } else {
+      ensure_packages($package['name'], $default_options + $package)
+    }
   }
 }

@@ -26,6 +26,8 @@ base_packages:
     - name: 'package_options'
       ensure: 'present'
       source: 'package_source'
+    - name: 'package_cmd'
+      command: '/usr/bin/test'
 
 desktop_packages:
     - name: 'package_present'
