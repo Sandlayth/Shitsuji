@@ -5,4 +5,9 @@
 moduledir '.modules'
 
 mod 'puppetlabs/stdlib', '8.5.0'
+mod 'puppetlabs/docker', '6.0.1'
 mod 'saz/sudo', '7.0.2'
+mod 'puppetlabs/apt', '9.0.0'
+mod 'puppetlabs/powershell', '5.2.0'
+mod 'puppetlabs/reboot', '4.3.0'
+mod 'puppetlabs/pwshlib', '0.10.2'

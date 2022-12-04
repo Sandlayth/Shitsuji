@@ -3,5 +3,6 @@
 ---
 fixtures:
   forge_modules:
+      docker: "puppetlabs/docker"
       stdlib: "puppetlabs/stdlib"
       sudo: "saz/sudo"
