@@ -27,4 +27,12 @@ class profiles::dnsserver {
     compose_files => ['/opt/docker-compose/dnsserver/docker-compose.yml'],
     subscribe     => File['docker-compose'],
   }
+
+  firewall { '100 allow http to 192.168.0.0/16':
+    source      => '192.168.0.0/16',
+    destination => '192.168.0.0/16',
+    dport       => ['1080'],
+    proto       => 'tcp',
+    action      => 'accept',
+  }
 }

@@ -3,3 +3,4 @@ name: shitsuji
 modules:
 - saz/sudo
 - puppetlabs/docker
+- puppetlabs/firewall

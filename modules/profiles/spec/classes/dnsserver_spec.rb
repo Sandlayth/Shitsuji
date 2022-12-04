@@ -38,6 +38,12 @@ describe 'profiles::dnsserver' do
           .with(ensure: 'present')
           .with(compose_files: ['/opt/docker-compose/dnsserver/docker-compose.yml'])
           .with(subscribe: 'File[docker-compose]')
+        is_expected.to contain_firewall('100 allow http to 192.168.0.0/16')
+          .with(destination: '192.168.0.0/16')
+          .with(source: '192.168.0.0/16')
+          .with(dport: ['1080'])
+          .with(proto: 'tcp')
+          .with(action: 'accept')
       }
     end
   end
