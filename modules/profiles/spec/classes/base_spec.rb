@@ -9,20 +9,7 @@ describe 'profiles::base' do
       let(:hiera_config) { 'hiera-rspec.yaml' }
 
       it { is_expected.to compile }
-      it {
-        is_expected.to contain_package('package_present')
-          .with(name: 'package_present')
-          .with(ensure: 'installed')
-        is_expected.to contain_package('package_absent')
-          .with(name: 'package_absent')
-          .with(ensure: 'absent')
-        is_expected.to contain_package('package_options')
-          .with(name: 'package_options')
-          .with(ensure: 'installed')
-          .with(source: 'package_source')
-        is_expected.to contain_exec('install_package_cmd')
-          .with(command: '/usr/bin/test')
-      }
+      it { is_expected.to contain_profiles__install_packages('base_packages') }
     end
   end
 end
