@@ -16,6 +16,9 @@ base_packages:
       command: 'curl -sSL https://get.docker.com/ | sh'
       onlyif: 'test -f /usr/bin/curl'
       unless: 'test -f /usr/bin/docker'
+      service:
+          ensure: 'running'
+          enable: 'true'
     - name: 'docker-compose'
     - name: 'gcc'
     - name: 'git'
@@ -29,6 +32,7 @@ base_packages:
     - name: 'progress'
     - name: 'python3'
     - name: 'rsync'
+    - name: 'ripgrep'
     - name: 'tmux'
     - name: 'vim'
     - name: 'zip'
