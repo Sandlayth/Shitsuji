@@ -11,7 +11,12 @@ Run unit tests:
 pdk test unit
 ```
 
+Install puppet dependencies
+```
+bolt module install
+```
+
 Apply a role locally:
 ```
-sudo bolt plan -t localhost roles::<my_role> --verbose
+sudo bolt plan -t localhost run roles::<my_role> --verbose
 ```
