@@ -21,6 +21,10 @@ users:
 
 base_packages:
     - name: 'package_present'
+    - name: 'package_service'
+      service:
+          ensure: 'running'
+          enable: 'true'
     - name: 'package_absent'
       ensure: 'absent'
     - name: 'package_options'

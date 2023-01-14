@@ -13,6 +13,13 @@ describe 'profiles::install_packages' do
               'name': 'package_present'
             },
             {
+              'name': 'package_service',
+              'service': {
+                'ensure': 'running',
+                'enable': 'true'
+              }
+            },
+            {
               'name': 'package_absent',
               'ensure': 'absent'
             },
@@ -35,6 +42,9 @@ describe 'profiles::install_packages' do
         is_expected.to contain_package('package_present')
           .with(name: 'package_present')
           .with(ensure: 'installed')
+        is_expected.to contain_package('package_service')
+          .with(name: 'package_service')
+          .with(ensure: 'installed')
         is_expected.to contain_package('package_absent')
           .with(name: 'package_absent')
           .with(ensure: 'absent')
@@ -44,6 +54,9 @@ describe 'profiles::install_packages' do
           .with(source: 'package_source')
         is_expected.to contain_exec('install_package_cmd')
           .with(command: '/usr/bin/test')
+        is_expected.to contain_service('package_service')
+          .with(ensure: 'running')
+          .with(enable: 'true')
       }
     end
   end

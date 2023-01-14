@@ -10,9 +10,14 @@ define profiles::install_packages (Array $packages = []) {
   }
   $packages.each |$package| {
     if ($package['command']) {
-      ensure_resource('exec', "install_${package['name']}", $package - ['name', 'ensure'])
+      ensure_resource('exec', "install_${package['name']}", $package - ['name', 'ensure','service'])
     } else {
-      ensure_packages($package['name'], $default_options + $package)
+      ensure_packages($package['name'], $default_options + $package - ['service'])
+    }
+    if ($package['service']) {
+      service { $package['name']:
+        * => $package['service'],
+      }
     }
   }
 }
