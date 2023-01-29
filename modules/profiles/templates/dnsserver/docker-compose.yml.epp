@@ -1,0 +1,23 @@
+<%- | Boolean $enable_dhcp_server | -%>
+version: '3'
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    <%- if $enable_dhcp_server { -%>
+    network_mode: 'host'
+    cap_add:
+      - NET_ADMIN
+    <%- } else { -%>
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '1080:80/tcp'
+    <%- } -%>
+    environment:
+      TZ: 'Europe/Paris'
+      WEBPASSWORD: 'root'
+    volumes:
+      - '/opt/pihole/etc:/etc/pihole'
+      - '/opt/pihole/dnsmasq.d:/etc/dnsmasq.d'
+    restart: unless-stopped

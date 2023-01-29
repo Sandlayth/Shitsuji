@@ -6,7 +6,6 @@ describe 'profiles::dnsserver' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
-
       it { is_expected.to compile }
       it {
         is_expected.to contain_file('/opt')
@@ -32,7 +31,6 @@ describe 'profiles::dnsserver' do
           .with(owner: 'root')
           .with(group: 'root')
           .with(mode: '0644')
-          .with(source: 'puppet:///modules/profiles/dnsserver/docker-compose.yml')
           .with(path: '/opt/docker-compose/dnsserver/docker-compose.yml')
         is_expected.to contain_docker_compose('pihole')
           .with(ensure: 'present')
@@ -45,6 +43,73 @@ describe 'profiles::dnsserver' do
           .with(proto: 'tcp')
           .with(action: 'accept')
       }
+      context "with no param set" do
+        it {
+          verify_contents(catalogue, "docker-compose", [
+            "version: '3'",
+            "services:",
+            "  pihole:",
+            "    container_name: pihole",
+            "    image: pihole/pihole:latest",
+            "    ports:",
+            "      - '53:53/tcp'",
+            "      - '53:53/udp'",
+            "      - '1080:80/tcp'",
+            "    environment:",
+            "      TZ: 'Europe/Paris'",
+            "      WEBPASSWORD: 'root'",
+            "    volumes:",
+            "      - '/opt/pihole/etc:/etc/pihole'",
+            "      - '/opt/pihole/dnsmasq.d:/etc/dnsmasq.d'",
+            "    restart: unless-stopped"
+          ])
+        }
+      end
+      context "with dhcp param explicitely disabled" do
+        let(:params) {{ 'enable_dhcp_server' => false }}
+        it {
+          verify_contents(catalogue, "docker-compose", [
+            "version: '3'",
+            "services:",
+            "  pihole:",
+            "    container_name: pihole",
+            "    image: pihole/pihole:latest",
+            "    ports:",
+            "      - '53:53/tcp'",
+            "      - '53:53/udp'",
+            "      - '1080:80/tcp'",
+            "    environment:",
+            "      TZ: 'Europe/Paris'",
+            "      WEBPASSWORD: 'root'",
+            "    volumes:",
+            "      - '/opt/pihole/etc:/etc/pihole'",
+            "      - '/opt/pihole/dnsmasq.d:/etc/dnsmasq.d'",
+            "    restart: unless-stopped"
+          ])
+        }
+      end
+      context "with dhcp param enabled" do
+        let(:params) {{ 'enable_dhcp_server' => true }}
+        it {
+          verify_contents(catalogue, "docker-compose", [
+            "version: '3'",
+            "services:",
+            "  pihole:",
+            "    container_name: pihole",
+            "    image: pihole/pihole:latest",
+            "    network_mode: 'host'",
+            "    cap_add:",
+            "      - NET_ADMIN",
+            "    environment:",
+            "      TZ: 'Europe/Paris'",
+            "      WEBPASSWORD: 'root'",
+            "    volumes:",
+            "      - '/opt/pihole/etc:/etc/pihole'",
+            "      - '/opt/pihole/dnsmasq.d:/etc/dnsmasq.d'",
+            "    restart: unless-stopped"
+          ])
+        }
+      end
     end
   end
 end

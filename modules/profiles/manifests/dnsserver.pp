@@ -4,7 +4,7 @@
 #
 # @example
 #   include profiles::dnsserver
-class profiles::dnsserver {
+class profiles::dnsserver(Boolean $enable_dhcp_server = false) {
   file { ['/opt', '/opt/docker-compose', '/opt/docker-compose/dnsserver/']:
     ensure => directory,
     owner  => 'root',
@@ -14,12 +14,14 @@ class profiles::dnsserver {
   }
 
   file { 'docker-compose':
-    ensure => file,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-    source => 'puppet:///modules/profiles/dnsserver/docker-compose.yml',
-    path   => '/opt/docker-compose/dnsserver/docker-compose.yml',
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    path    => '/opt/docker-compose/dnsserver/docker-compose.yml',
+    content => epp('profiles/dnsserver/docker-compose.yml.epp', {
+        'enable_dhcp_server' => $enable_dhcp_server,
+    })
   }
 
   docker_compose { 'pihole':
