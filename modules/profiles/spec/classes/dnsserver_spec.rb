@@ -108,6 +108,15 @@ describe 'profiles::dnsserver' do
             "      - '/opt/pihole/dnsmasq.d:/etc/dnsmasq.d'",
             "    restart: unless-stopped"
           ])
+          is_expected.to contain_augeas('eth0_interface')
+          .with(context: '/files/etc/network/interfaces')
+          .with(changes: [
+            "set auto[child::1 = 'eth0']/1 eth0",
+            "set iface[. = 'eth0'] eth0",
+            "set iface[. = 'eth0']/family inet",
+            "set iface[. = 'eth0']/method static",
+            "set iface[. = 'eth0']/address 192.168.1.2",
+            "set iface[. = 'eth0']/netmask 255.255.255.0"])
         }
       end
     end

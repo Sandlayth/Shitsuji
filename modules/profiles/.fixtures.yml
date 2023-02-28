@@ -7,3 +7,4 @@ fixtures:
       firewall: "puppetlabs/firewall"
       stdlib: "puppetlabs/stdlib"
       sudo: "saz/sudo"
+      augeas_core: "puppetlabs/augeas_core"

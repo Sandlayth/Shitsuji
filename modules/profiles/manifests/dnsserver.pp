@@ -37,4 +37,18 @@ class profiles::dnsserver(Boolean $enable_dhcp_server = false) {
     proto       => 'tcp',
     action      => 'accept',
   }
+
+  if $enable_dhcp_server {
+    augeas{ "eth0_interface" :
+      context => "/files/etc/network/interfaces",
+      changes => [
+        "set auto[child::1 = 'eth0']/1 eth0",
+        "set iface[. = 'eth0'] eth0",
+        "set iface[. = 'eth0']/family inet",
+        "set iface[. = 'eth0']/method static",
+        "set iface[. = 'eth0']/address 192.168.1.2",
+        "set iface[. = 'eth0']/netmask 255.255.255.0",
+      ]
+    }
+  }
 }
