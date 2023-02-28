@@ -1,4 +1,4 @@
-plan roles::dns(
+plan roles::config_server(
   TargetSpec $targets,
 ) {
   $targets.apply_prep
@@ -6,5 +6,6 @@ plan roles::dns(
     include profiles::users
     include profiles::base
     include profiles::dnsserver
+    include profiles::secretmanager
   }
 }
