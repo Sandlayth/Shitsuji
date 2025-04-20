@@ -9,6 +9,9 @@ users:
 base_packages:
     - name: 'aria2'
     - name: 'bash'
+    - name: 'build-essential'
+    - name: 'cmake'
+    - name: 'colordiff'
     - name: 'curl'
     - name: 'dos2unix'
     - name: 'docker'
@@ -20,21 +23,44 @@ base_packages:
           ensure: 'running'
           enable: 'true'
     - name: 'docker-compose'
+    - name: 'docker scout'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh'
+      onlyif: 'test -f /usr/bin/curl'
+      onlyif: 'test -f /usr/bin/docker'
+    - name: 'extrepo' # debian
     - name: 'gcc'
     - name: 'git'
+#   - name: 'glow' # archlinux
     - name: 'gnupg'
+    - name: 'hadolint'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'curl -L https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint && chmod 755 /usr/local/bin/hadolint'
+      onlyif: 'test -f /usr/bin/curl'
+      unless: 'test -f /usr/local/bin/hadolint'
     - name: 'iproute2'
     - name: 'iptables'
     - name: 'jq'
     - name: 'make'
     - name: 'mosh'
+    - name: 'ntp'
     - name: 'parted'
     - name: 'progress'
     - name: 'python3'
+    - name: 'python3-dev'
     - name: 'rsync'
     - name: 'ripgrep'
+    - name: 'snapd'
+    - name: 'slim'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: "curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sed 's$downloads.dockerslim.com/releases/$github.com/slimtoolkit/slim/releases/download/$' | sudo -E bash -"
+      onlyif: 'test -f /usr/bin/curl'
+      unless: 'test -f /usr/local/bin/slim'
     - name: 'tmux'
-    - name: 'vim'
+    - name: 'tree'
+#   - name: 'trivy'
+#   - name: 'vim' # archlinux
+    - name: 'vim-nox'
     - name: 'zip'
 
 desktop_packages:
@@ -47,26 +73,42 @@ desktop_packages:
 
 graphical_packages:
     - name: 'baobab'
+#    - name: 'bitwarden' # snap
+#    - name: 'bw' # snap ## bitwarden cli
+#    - name: 'clipcat'
+# after install snap connect bitwarden:password-manager-service
     - name: 'dmenu'
+#   - name: 'discord' # snap
+# after install  snap connect discord:system-observe
     - name: 'dunst'
     - name: 'feh'
-    - name: 'firefox'
+#    - name: 'firefox' # archlinux
+    - name: 'extrepo'
+    - name: 'librewolf' # debian before run extrepo enable librewolf
+    - name: 'firefox-esr'
     - name: 'filezilla'
     - name: 'gimp'
+    - name: 'gitlab-cli'
     - name: 'gparted'
     - name: 'i3'
     - name: 'i3blocks'
     - name: 'i3status'
     - name: 'inkscape'
-    - name: 'keybase'
+#    - name: 'keybase' # archlinux
     - name: 'kolourpaint'
     - name: 'mpv'
-    - name: 'mps-youtube'
+#   - name: 'mps-youtube' # archlinux
+#   - name: 'yewtube' # pip
+    - name: 'openshot-qt'
     - name: 'pavucontrol'
     - name: 'pasystray'
     - name: 'pcmanfm'
+    - name: 'pidgin'
+    - name: 'polybar' # debian
     - name: 'redshift'
     - name: 'rxvt-unicode'
     - name: 'scrot'
+    - name: 'thunderbird'
     - name: 'xclip'
+    - name: 'xinput'
     - name: 'zathura'
