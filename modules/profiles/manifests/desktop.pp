@@ -3,9 +3,14 @@
 # @example
 #   include profiles::desktop
 class profiles::desktop {
-  $packages = lookup('desktop_packages')
+  $desktop_packages = lookup('desktop_packages')
+  $graphical_packages = lookup('graphical_packages')
 
   profiles::install_packages { 'desktop_packages':
-    packages => $packages,
+    packages => $desktop_packages,
+  }
+
+  profiles::install_packages { 'graphical_packages':
+    packages => $graphical_packages,
   }
 }
