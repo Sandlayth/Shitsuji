@@ -27,17 +27,26 @@ base_packages:
       path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
       command: 'curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh'
       onlyif: 'test -f /usr/bin/curl'
+      onlyif: 'test -f /etc/debian_version'
       onlyif: 'test -f /usr/bin/docker'
-    - name: 'extrepo' # debian
+    - name: 'docker-scout'
+      onlyif: 'test -f /etc/arch-release'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'yes | yay -S --needed docker-scout'
     - name: 'gcc'
     - name: 'git'
-#   - name: 'glow' # archlinux
+    - name: 'glow' # archlinux
     - name: 'gnupg'
-    - name: 'hadolint'
+    - name: 'hadolint-debian'
       path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
       command: 'curl -L https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint && chmod 755 /usr/local/bin/hadolint'
       onlyif: 'test -f /usr/bin/curl'
+      onlyif: 'test -f /etc/debian_version'
       unless: 'test -f /usr/local/bin/hadolint'
+    - name: 'hadolint'
+      onlyif: 'test -f /etc/arch-release'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'yes | yay -S --needed hadolint'
     - name: 'iproute2'
     - name: 'iptables'
     - name: 'jq'
@@ -52,14 +61,19 @@ base_packages:
     - name: 'ripgrep'
     - name: 'snapd'
     - name: 'slim'
+      onlyif: 'test -f /etc/arch-release'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'yes | yay -S --needed docker-slim-bin'
+    - name: 'slim-debian'
       path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
       command: "curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sed 's$downloads.dockerslim.com/releases/$github.com/slimtoolkit/slim/releases/download/$' | sudo -E bash -"
       onlyif: 'test -f /usr/bin/curl'
+      onlyif: 'test -f /etc/debian_version'
       unless: 'test -f /usr/local/bin/slim'
     - name: 'tmux'
     - name: 'tree'
-#   - name: 'trivy'
-#   - name: 'vim' # archlinux
+    - name: 'trivy'
+    - name: 'vim' # archlinux
     - name: 'vim-nox'
     - name: 'zip'
 
@@ -82,10 +96,7 @@ graphical_packages:
 # after install  snap connect discord:system-observe
     - name: 'dunst'
     - name: 'feh'
-#    - name: 'firefox' # archlinux
-    - name: 'extrepo'
     - name: 'librewolf' # debian before run extrepo enable librewolf
-    - name: 'firefox-esr'
     - name: 'filezilla'
     - name: 'gimp'
     - name: 'gitlab-cli'
@@ -94,17 +105,24 @@ graphical_packages:
     - name: 'i3blocks'
     - name: 'i3status'
     - name: 'inkscape'
-#    - name: 'keybase' # archlinux
+    - name: 'keybase' # archlinux
+      onlyif: 'test -f /etc/arch-release'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'yes | yay -S --needed keybase'
+    - name: 'iproute2'
     - name: 'kolourpaint'
     - name: 'mpv'
-#   - name: 'mps-youtube' # archlinux
-#   - name: 'yewtube' # pip
+    - name: 'yewtube'
+      onlyif: 'test -f /etc/arch-release'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      command: 'yes | yay -S --needed yewtube'
+    - name: 'iproute2'
     - name: 'openshot-qt'
     - name: 'pavucontrol'
     - name: 'pasystray'
     - name: 'pcmanfm'
     - name: 'pidgin'
-    - name: 'polybar' # debian
+    - name: 'polybar'
     - name: 'redshift'
     - name: 'rxvt-unicode'
     - name: 'scrot'
