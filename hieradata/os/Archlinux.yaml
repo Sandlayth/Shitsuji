@@ -1,0 +1,131 @@
+---
+core_tools:
+    - name: 'pacman-contrib'
+    - name: 'exfat-utils'
+
+dev_tools:
+    - name: 'base-devel'
+    - name: 'python'
+    - name: 'jdk17-openjdk'
+    - name: 'github-cli'
+    - name: 'glow'
+    - name: 'usage'
+    - name: 'openai-codex'
+    - name: 'glab'
+    - name: 'fvm'
+      aur: true
+    - name: 'bump2version'
+      aur: true
+    - name: 'asdf-vm'
+      aur: true
+    - name: 'kcl-lang'
+      aur: true
+    - name: 'claude-code'
+      aur: true
+    - name: 'md-viewer-bin'
+      aur: true
+    - name: 'ghorg-bin'
+      aur: true
+    - name: 'android-sdk-cmdline-tools-latest'
+      aur: true
+
+infra_tools:
+    - name: 'docker'
+      service:
+          ensure: 'running'
+          enable: 'true'
+    - name: 'libvirt'
+    - name: 'qemu-full'
+    - name: 'puppet'
+    - name: 'docker-scout'
+      aur: true
+    - name: 'google-cloud-cli'
+      aur: true
+    - name: 'helmfile-bin'
+      aur: true
+    - name: 'vagrant'
+      aur: true
+    - name: 'puppet-bolt'
+      aur: true
+    - name: 'pdk'
+      aur: true
+
+security_tools:
+    - name: 'keybase'
+      aur: true
+    - name: '1password-cli'
+      aur: true
+    - name: 'doppler-cli-bin'
+      aur: true
+    - name: 'vanta-agent'
+      aur: true
+    - name: 'hadolint-bin'
+      aur: true
+    - name: 'docker-slim-bin'
+      aur: true
+
+net_tools:
+    - name: 'bind'
+    - name: 'networkmanager'
+    - name: 'bluez'
+    - name: 'bluez-utils'
+    - name: 'wireshark-qt'
+
+media_tools:
+    - name: 'reaper'
+    - name: 'yt-dlp'
+    - name: 'tesseract-data-eng'
+    - name: 'tesseract-data-fra'
+    - name: 'pulseaudio'
+    - name: 'pulseaudio-alsa'
+    - name: 'pulseaudio-bluetooth'
+    - name: 'ocrmypdf'
+      aur: true
+    - name: 'untrunc-anthwlock-cli-git'
+      aur: true
+    - name: 'woeusb'
+      aur: true
+    - name: 'yewtube'
+      aur: true
+
+desktop_apps:
+    - name: 'libreoffice-fresh'
+    - name: 'code'
+    - name: 'discord'
+    - name: 'clipcat'
+    - name: 'l3afpad'
+    - name: 'polkit-gnome'
+    - name: 'tigervnc'
+    - name: 'librewolf-bin'
+      aur: true
+    - name: 'brave-bin'
+      aur: true
+    - name: 'cursor-bin'
+      aur: true
+    - name: 'pidgin'
+      aur: true
+    - name: 'ferdium'
+      aur: true
+    - name: 'teamviewer'
+      aur: true
+    - name: 'pcloud-drive'
+      aur: true
+
+window_manager:
+    - name: 'i3-wm'
+    - name: 'xorg-server'
+    - name: 'xorg-xinit'
+    - name: 'xorg-xinput'
+    - name: 'rxvt-unicode-truecolor-wide-glyphs'
+      aur: true
+    - name: 'st'
+      aur: true
+    - name: 'xplugd'
+      aur: true
+
+fonts:
+    - name: 'noto-fonts'
+    - name: 'noto-fonts-emoji'
+    - name: 'ttf-dejavu-nerd'
+    - name: 'ttf-symbola'
+      aur: true

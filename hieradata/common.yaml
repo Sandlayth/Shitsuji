@@ -1,132 +1,153 @@
 ---
+# Tiers hold packages with identical names across distros; per-OS names, AUR
+# packages and custom installers live in hieradata/os/<family>.yaml and are
+# array-merged onto these.
+lookup_options:
+  "^(core_tools|dev_tools|infra_tools|security_tools|net_tools|media_tools|desktop_apps|window_manager|fonts)$":
+    merge: unique
+
+aur_helper: 'yay'
+aur_user: 'aur'
+
 users:
+    - name: yassine
+      ensure: present
+      admin: true
+      shell: /usr/bin/bash
+      dotfiles: "https://github.com/Sandlayth/dotfiles"
     - name: sandlayth
       ensure: present
       admin: true
       shell: /usr/bin/bash
       dotfiles: "https://github.com/Sandlayth/dotfiles"
 
-base_packages:
-    - name: 'aria2'
+core_tools:
     - name: 'bash'
-    - name: 'build-essential'
-    - name: 'cmake'
-    - name: 'colordiff'
+    - name: 'bash-completion'
     - name: 'curl'
-    - name: 'dos2unix'
-    - name: 'docker'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'curl -sSL https://get.docker.com/ | sh'
-      onlyif: 'test -f /usr/bin/curl'
-      unless: 'test -f /usr/bin/docker'
-      service:
-          ensure: 'running'
-          enable: 'true'
-    - name: 'docker-compose'
-    - name: 'docker scout'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh'
-      onlyif: 'test -f /usr/bin/curl'
-      onlyif: 'test -f /etc/debian_version'
-      onlyif: 'test -f /usr/bin/docker'
-    - name: 'docker-scout'
-      onlyif: 'test -f /etc/arch-release'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'yes | yay -S --needed docker-scout'
-    - name: 'gcc'
     - name: 'git'
-    - name: 'glow' # archlinux
     - name: 'gnupg'
-    - name: 'hadolint-debian'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'curl -L https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint && chmod 755 /usr/local/bin/hadolint'
-      onlyif: 'test -f /usr/bin/curl'
-      onlyif: 'test -f /etc/debian_version'
-      unless: 'test -f /usr/local/bin/hadolint'
-    - name: 'hadolint'
-      onlyif: 'test -f /etc/arch-release'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'yes | yay -S --needed hadolint'
-    - name: 'iproute2'
-    - name: 'iptables'
-    - name: 'jq'
-    - name: 'make'
-    - name: 'mosh'
-    - name: 'ntp'
-    - name: 'parted'
-    - name: 'progress'
-    - name: 'python3'
-    - name: 'python3-dev'
-    - name: 'rsync'
-    - name: 'ripgrep'
-    - name: 'snapd'
-    - name: 'slim'
-      onlyif: 'test -f /etc/arch-release'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'yes | yay -S --needed docker-slim-bin'
-    - name: 'slim-debian'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: "curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sed 's$downloads.dockerslim.com/releases/$github.com/slimtoolkit/slim/releases/download/$' | sudo -E bash -"
-      onlyif: 'test -f /usr/bin/curl'
-      onlyif: 'test -f /etc/debian_version'
-      unless: 'test -f /usr/local/bin/slim'
+    - name: 'vim'
+    - name: 'nano'
     - name: 'tmux'
     - name: 'tree'
-    - name: 'trivy'
-    - name: 'vim' # archlinux
-    - name: 'vim-nox'
     - name: 'zip'
+    - name: '7zip'
+    - name: 'dos2unix'
+    - name: 'colordiff'
+    - name: 'aria2'
+    - name: 'rsync'
+    - name: 'ripgrep'
+    - name: 'bat'
+    - name: 'htop'
+    - name: 'jq'
+    - name: 'yq'
+    - name: 'parallel'
+    - name: 'pwgen'
+    - name: 'progress'
+    - name: 'bc'
+    - name: 'mosh'
+    - name: 'btrfs-progs'
+    - name: 'fscrypt'
 
-desktop_packages:
-    - name: 'cups'
+dev_tools:
+    - name: 'cmake'
+    - name: 'make'
+    - name: 'gcc'
+    - name: 'graphviz'
+    - name: 'mise'
+    - name: 'pyenv'
+    - name: 'uv'
+    - name: 'pnpm'
+    - name: 'just'
+    - name: 'ansible-lint'
+    - name: 'android-tools'
+    - name: 'android-file-transfer'
+
+infra_tools:
+    - name: 'docker-compose'
+    - name: 'kubectl'
+    - name: 'kubectx'
+    - name: 'kubie'
+    - name: 'helm'
+    - name: 'minikube'
+    - name: 'argocd'
+    - name: 'istio'
+    - name: 'terraform'
+    - name: 'tflint'
+    - name: 'rclone'
+    - name: 'azure-cli'
+
+security_tools:
+    - name: 'sops'
+    - name: 'trivy'
+
+net_tools:
+    - name: 'tailscale'
+    - name: 'traceroute'
+    - name: 'dnsmasq'
+    - name: 'iproute2'
+    - name: 'iptables'
+    - name: 'ntp'
+    - name: 'davfs2'
+    - name: 'usbmuxd'
+
+media_tools:
     - name: 'ffmpeg'
-    - name: 'hplip'
     - name: 'imagemagick'
+    - name: 'audacity'
+    - name: 'obs-studio'
+    - name: 'moonlight-qt'
+    - name: 'tesseract'
+    - name: 'perl-image-exiftool'
     - name: 'pdftk'
-    - name: 'youtube-dl'
+    - name: 'cups'
+    - name: 'hplip'
+    - name: 'simple-scan'
 
-graphical_packages:
-    - name: 'baobab'
-#    - name: 'bitwarden' # snap
-#    - name: 'bw' # snap ## bitwarden cli
-#    - name: 'clipcat'
-# after install snap connect bitwarden:password-manager-service
-    - name: 'dmenu'
-#   - name: 'discord' # snap
-# after install  snap connect discord:system-observe
-    - name: 'dunst'
-    - name: 'feh'
-    - name: 'librewolf' # debian before run extrepo enable librewolf
+desktop_apps:
+    - name: 'chromium'
+    - name: 'thunderbird'
+    - name: 'evince'
+    - name: 'zathura'
+    - name: 'zathura-pdf-mupdf'
+    - name: 'xournalpp'
+    - name: 'signal-desktop'
+    - name: 'kdeconnect'
+    - name: 'nautilus'
+    - name: 'pcmanfm'
     - name: 'filezilla'
     - name: 'gimp'
-    - name: 'gitlab-cli'
+    - name: 'inkscape'
+    - name: 'kolourpaint'
+    - name: 'kmag'
+    - name: 'mpv'
+    - name: 'bitwarden'
+    - name: 'baobab'
     - name: 'gparted'
-    - name: 'i3'
+    - name: 'redshift'
+    - name: 'blueman'
+    - name: 'gnome-keyring'
+    - name: 'seahorse'
+    - name: 'mysql-workbench'
+    - name: 'feh'
+    - name: 'lxqt-config'
+    - name: 'x11vnc'
+
+window_manager:
     - name: 'i3blocks'
     - name: 'i3status'
-    - name: 'inkscape'
-    - name: 'keybase' # archlinux
-      onlyif: 'test -f /etc/arch-release'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'yes | yay -S --needed keybase'
-    - name: 'iproute2'
-    - name: 'kolourpaint'
-    - name: 'mpv'
-    - name: 'yewtube'
-      onlyif: 'test -f /etc/arch-release'
-      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
-      command: 'yes | yay -S --needed yewtube'
-    - name: 'iproute2'
-    - name: 'openshot-qt'
+    - name: 'i3lock'
+    - name: 'polybar'
+    - name: 'dmenu'
+    - name: 'dunst'
+    - name: 'scrot'
+    - name: 'alacritty'
+    - name: 'arandr'
+    - name: 'autorandr'
+    - name: 'xclip'
     - name: 'pavucontrol'
     - name: 'pasystray'
-    - name: 'pcmanfm'
-    - name: 'pidgin'
-    - name: 'polybar'
-    - name: 'redshift'
-    - name: 'rxvt-unicode'
-    - name: 'scrot'
-    - name: 'thunderbird'
-    - name: 'xclip'
-    - name: 'xinput'
-    - name: 'zathura'
+    - name: 'numlockx'
+
+fonts: []

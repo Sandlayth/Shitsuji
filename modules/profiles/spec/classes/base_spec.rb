@@ -9,7 +9,11 @@ describe 'profiles::base' do
       let(:hiera_config) { 'hiera-rspec.yaml' }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_profiles__install_packages('base_packages') }
+      it { is_expected.to contain_profiles__install_packages('core_tools') }
+      it { is_expected.to contain_profiles__install_packages('dev_tools') }
+      it { is_expected.to contain_profiles__install_packages('infra_tools') }
+      it { is_expected.to contain_profiles__install_packages('security_tools') }
+      it { is_expected.to contain_profiles__install_packages('net_tools') }
     end
   end
 end

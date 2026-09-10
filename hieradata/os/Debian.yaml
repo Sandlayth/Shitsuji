@@ -1,0 +1,66 @@
+---
+# Best-effort Debian/Ubuntu mappings; not yet validated on a live Debian host.
+core_tools:
+    - name: 'exfatprogs'
+
+dev_tools:
+    - name: 'build-essential'
+    - name: 'python3'
+    - name: 'python3-dev'
+    - name: 'openjdk-17-jdk'
+    - name: 'gh'
+
+infra_tools:
+    - name: 'docker'
+      command: 'curl -sSL https://get.docker.com/ | sh'
+      unless: 'test -f /usr/bin/docker'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      service:
+          ensure: 'running'
+          enable: 'true'
+    - name: 'docker-scout'
+      command: 'curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      onlyif: 'test -f /usr/bin/docker'
+    - name: 'qemu-system'
+    - name: 'puppet-agent'
+
+security_tools:
+    - name: 'hadolint'
+      command: 'curl -L https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint && chmod 755 /usr/local/bin/hadolint'
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      unless: 'test -f /usr/local/bin/hadolint'
+    - name: 'slim'
+      command: "curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sed 's$downloads.dockerslim.com/releases/$github.com/slimtoolkit/slim/releases/download/$' | sudo -E bash -"
+      path: [ '/bin', '/usr/bin', '/usr/local/bin' ]
+      unless: 'test -f /usr/local/bin/slim'
+
+net_tools:
+    - name: 'bind9'
+    - name: 'network-manager'
+    - name: 'bluez'
+
+media_tools:
+    - name: 'youtube-dl'
+    - name: 'openshot-qt'
+    - name: 'tesseract-ocr-eng'
+    - name: 'tesseract-ocr-fra'
+    - name: 'pulseaudio'
+    - name: 'pulseaudio-module-bluetooth'
+
+desktop_apps:
+    - name: 'libreoffice'
+    - name: 'policykit-1-gnome'
+    - name: 'tigervnc-viewer'
+
+window_manager:
+    - name: 'i3'
+    - name: 'xserver-xorg'
+    - name: 'xinit'
+    - name: 'rxvt-unicode'
+
+fonts:
+    - name: 'fonts-noto'
+    - name: 'fonts-noto-color-emoji'
+    - name: 'fonts-dejavu'
+    - name: 'fonts-symbola'
