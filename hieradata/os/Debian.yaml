@@ -58,9 +58,11 @@ window_manager:
     - name: 'xserver-xorg'
     - name: 'xinit'
     - name: 'rxvt-unicode'
+    - name: 'conky-all'
 
 fonts:
     - name: 'fonts-noto'
+    - name: 'fonts-noto-cjk'
     - name: 'fonts-noto-color-emoji'
     - name: 'fonts-dejavu'
     - name: 'fonts-symbola'

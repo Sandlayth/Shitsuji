@@ -91,6 +91,7 @@ net_tools:
     - name: 'ntp'
     - name: 'davfs2'
     - name: 'usbmuxd'
+    - name: 'vnstat'
 
 media_tools:
     - name: 'ffmpeg'
@@ -104,6 +105,7 @@ media_tools:
     - name: 'cups'
     - name: 'hplip'
     - name: 'simple-scan'
+    - name: 'playerctl'
 
 desktop_apps:
     - name: 'chromium'
@@ -149,5 +151,6 @@ window_manager:
     - name: 'pavucontrol'
     - name: 'pasystray'
     - name: 'numlockx'
+    - name: 'picom'
 
 fonts: []

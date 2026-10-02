@@ -116,6 +116,7 @@ window_manager:
     - name: 'xorg-server'
     - name: 'xorg-xinit'
     - name: 'xorg-xinput'
+    - name: 'conky'
     - name: 'rxvt-unicode-truecolor-wide-glyphs'
       aur: true
     - name: 'st'
@@ -125,6 +126,7 @@ window_manager:
 
 fonts:
     - name: 'noto-fonts'
+    - name: 'noto-fonts-cjk'
     - name: 'noto-fonts-emoji'
     - name: 'ttf-dejavu-nerd'
     - name: 'ttf-symbola'
