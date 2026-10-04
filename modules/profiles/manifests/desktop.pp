@@ -21,6 +21,9 @@ class profiles::desktop (
     Class['profiles::aur'] -> Profiles::Install_packages <| |>
   }
 
+  # System-wide font defaults (readable, overridable Arabic).
+  include profiles::fontconfig
+
   $tiers.each |$tier| {
     profiles::install_packages { $tier:
       packages   => lookup($tier, { 'default_value' => [] }),
