@@ -92,6 +92,9 @@ net_tools:
     - name: 'davfs2'
     - name: 'usbmuxd'
     - name: 'vnstat'
+      service:
+          ensure: 'running'
+          enable: 'true'
 
 media_tools:
     - name: 'ffmpeg'
