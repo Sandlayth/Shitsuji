@@ -46,6 +46,7 @@ core_tools:
     - name: 'pwgen'
     - name: 'progress'
     - name: 'bc'
+    - name: 'fribidi'
     - name: 'mosh'
     - name: 'btrfs-progs'
     - name: 'fscrypt'
