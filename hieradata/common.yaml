@@ -55,6 +55,7 @@ dev_tools:
     - name: 'cmake'
     - name: 'make'
     - name: 'gcc'
+    - name: 'zig'  # C cross-compiler for cgo builds (vikunja::build)
     - name: 'graphviz'
     - name: 'mise'
     - name: 'pyenv'

@@ -1,27 +1,40 @@
-# This is an example inventory.yaml
-# To read more about inventory files, see https://pup.pt/bolt-inventory
+# Bolt inventory, see https://pup.pt/bolt-inventory
 #
-# groups:
-#   - name: linux
-#     targets:
-#       - target1.example.com
-#       - target2.example.com
-#     config:
-#       transport: ssh
-#       ssh:
-#         private-key: /path/to/private_key.pem
-#   - name: windows
-#     targets:
-#       - name: win1
-#         uri: target3.example.com
-#       - name: win2
-#         uri: target4.example.com
-#     config:
-#       transport: winrm
-# config:
-#   ssh:
-#     host-key-check: false
-#   winrm:
-#     user: Administrator
-#     password: Bolt!
-#     ssl: false
+# Workstations are applied locally (`-t localhost`), so only remote hosts live
+# here.
+---
+groups:
+  - name: nas
+    targets:
+      - name: futo
+        # Tailscale IP: works from anywhere, and LAN TCP from Wi-Fi clients is
+        # unreliable (docs/nas-futo.md). LAN address: 192.168.1.3.
+        uri: 100.86.101.69
+        facts:
+          model: DS214+
+          dsm_arch: armadaxp
+        vars:
+          # Loopback: DSM's firewall is off, so only the Tailscale Service
+          # (own IP + HTTPS cert) exposes it
+          vikunja_listen: 127.0.0.1:3456
+          vikunja_tailscale_service: svc:vikunja
+          vikunja_public_url: https://vikunja.tail9f3ba5.ts.net/
+          # Published by roles::nas with tailnet::service (HTTPS, own tailnet IP)
+          tailscale_services:
+            svc:synology: http://127.0.0.1:5000
+    vars:
+      # Host specifics read by generic plans (e.g. vikunja)
+      service_manager: rc.d
+      tailscale_cli: /var/packages/Tailscale/target/bin/tailscale
+      # / is a 2.4 GB system partition; /tmp is noexec
+      staging_dir: /volume1/@tmp
+      # Official builds are UPX-packed (needs kernel >= 3.11) and assume NEON
+      vikunja_source: build
+    config:
+      transport: ssh
+      ssh:
+        user: root
+        host-key-check: true
+        connect-timeout: 15
+        # /tmp is a noexec tmpfs on DSM; tasks must be uploaded somewhere executable.
+        tmpdir: /volume1/@tmp

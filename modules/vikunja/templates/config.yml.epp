@@ -1,0 +1,30 @@
+<%- |
+  String  $dir,
+  String  $listen,
+  String  $public_url,
+  String  $timezone,
+| -%>
+# Managed by Shitsuji (vikunja). service.secret comes from the
+# VIKUNJA_SERVICE_SECRET env var, loaded from secret.env by the service.
+service:
+  # Who can reach it is decided by this address (e.g. a VPN IP only).
+  interface: "<%= $listen %>"
+  publicurl: "<%= $public_url %>"
+  rootpath: "<%= $dir %>/data"
+  timezone: "<%= $timezone %>"
+  # Accounts are created by the plan; nobody signs up from the web.
+  enableregistration: false
+  enableemailreminders: false
+database:
+  type: "sqlite"
+  path: "<%= $dir %>/data/vikunja.db"
+files:
+  basepath: "<%= $dir %>/data/files"
+  # Hosts may run this from a small system partition: keep attachments small.
+  maxsize: "5MB"
+mailer:
+  enabled: false
+log:
+  level: "WARNING"
+  http: "off"
+  database: "off"

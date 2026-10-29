@@ -1,0 +1,35 @@
+<%- |
+  String $dir,
+| -%>
+#!/bin/sh
+# Managed by Shitsuji (vikunja). For hosts without systemd units (e.g. DSM,
+# which runs /usr/local/etc/rc.d/*.sh with "start" at boot and "stop" at
+# shutdown). A small root loop keeps Vikunja running as nobody and restarts it
+# when it exits, which also covers a listen address that is not up yet at
+# boot. The secret is loaded from a root-only env file before dropping
+# privileges.
+DIR=<%= $dir %>
+PID=$DIR/data/vikunja.pid
+
+running() { [ -f "$PID" ] && kill -0 "$(cat "$PID")" 2>/dev/null; }
+
+case "$1" in
+  start)
+    running && exit 0
+    set -a; . "$DIR/secret.env"; set +a
+    # setsid: the loop leads its own process group, so stop can kill both.
+    setsid sh -c "echo \$\$ > $PID; while :; do \
+        su -s /bin/sh nobody -c 'cd $DIR/data && exec $DIR/vikunja --config $DIR/config.yml'; \
+        sleep 5; done" >> "$DIR/data/vikunja.log" 2>&1 < /dev/null &
+    ;;
+  stop)
+    running && kill -- "-$(cat "$PID")"
+    rm -f "$PID"
+    ;;
+  restart)
+    "$0" stop; sleep 2; "$0" start
+    ;;
+  status)
+    running
+    ;;
+esac

@@ -1,0 +1,25 @@
+<%- |
+  String $dir,
+| -%>
+# Managed by Shitsuji (vikunja)
+[Unit]
+Description=Vikunja todo lists
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=nobody
+WorkingDirectory=<%= $dir %>/data
+EnvironmentFile=<%= $dir %>/secret.env
+ExecStart=<%= $dir %>/vikunja --config <%= $dir %>/config.yml
+# Also retries until the listen address exists (e.g. a VPN IP at boot).
+Restart=always
+RestartSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=<%= $dir %>/data
+
+[Install]
+WantedBy=multi-user.target
