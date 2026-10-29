@@ -19,6 +19,8 @@ groups:
           vikunja_listen: 127.0.0.1:3456
           vikunja_tailscale_service: svc:vikunja
           vikunja_public_url: https://vikunja.tail9f3ba5.ts.net/
+          # App lives on the system partition, so dumps go to the data volume
+          vikunja_backup_dir: /volume1/backups/vikunja
           # Published by roles::nas with tailnet::service (HTTPS, own tailnet IP)
           tailscale_services:
             svc:synology: http://127.0.0.1:5000

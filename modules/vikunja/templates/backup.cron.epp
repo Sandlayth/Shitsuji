@@ -1,0 +1,9 @@
+<%- |
+  String $dir,
+  String $schedule,
+| -%>
+# Managed by Shitsuji (vikunja)
+MAILTO=""
+SHELL=/bin/sh
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+<%= $schedule %> root <%= $dir %>/backup.sh

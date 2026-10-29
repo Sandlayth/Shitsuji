@@ -16,6 +16,10 @@
 # - `service_manager`: `systemd` (default) or `rc.d` (a boot script in
 #   /usr/local/etc/rc.d, for DSM)
 # - `staging_dir`: where downloads are unpacked (default `/var/tmp`)
+# - `vikunja_backup_dir`: where cron puts nightly `vikunja dump` zips (default
+#   `/var/backups/vikunja`); put it on other storage than `dir`
+# - `vikunja_backup_keep`: days of dumps to keep (default 14)
+# - `vikunja_backup_schedule`: cron time fields (default `30 3 * * *`)
 #
 # Idempotent: installs only when the version differs, restarts only when the
 # binary, config or service definition changed, creates the account only if
@@ -59,6 +63,9 @@ plan vikunja (
     $source     = $t.vars['vikunja_source'].lest || { 'release' }
     $manager    = $t.vars['service_manager'].lest || { 'systemd' }
     $staging    = $t.vars['staging_dir'].lest || { '/var/tmp' }
+    $backup_dir = $t.vars['vikunja_backup_dir'].lest || { '/var/backups/vikunja' }
+    $keep       = $t.vars['vikunja_backup_keep'].lest || { 14 }
+    $schedule   = $t.vars['vikunja_backup_schedule'].lest || { '30 3 * * *' }
     # Where the plan itself checks the app is up
     $probe      = $listen ? { /^0\.0\.0\.0:/ => "127.0.0.1:${port}", default => $listen }
 
@@ -126,19 +133,27 @@ plan vikunja (
 
     # 3. Config and service definition, pushed through the command channel
     # (some hosts, like DSM, have SFTP off)
+    # [content, mode, restarts the app when changed]
     $files = {
       "${dir}/config.yml" => [epp('vikunja/config.yml.epp', {
         'dir' => $dir, 'listen' => $listen, 'public_url' => $public_url, 'timezone' => $timezone,
-      }), '644'],
-      $service['path'] => [$service['content'], $service['mode']],
+      }), '644', true],
+      $service['path'] => [$service['content'], $service['mode'], true],
+      # Backups: a plain cron.d drop-in (DSM's crond reads it too)
+      "${dir}/backup.sh" => [epp('vikunja/backup.sh.epp', {
+        'dir' => $dir, 'dest' => $backup_dir, 'keep' => Integer($keep),
+      }), '755', false],
+      '/etc/cron.d/vikunja-backup' => [epp('vikunja/backup.cron.epp', {
+        'dir' => $dir, 'schedule' => $schedule,
+      }), '644', false],
     }
-    $changed = $files.map |$path, $spec| {
+    $changed = $files.filter |$path, $spec| {
       $b64 = base64('encode', $spec[0], 'strict')
       run_command(@("CMD"/L), $t).first['stdout'] =~ /changed/
         echo ${b64} | base64 -d > ${path}.new && chmod ${spec[1]} ${path}.new; \
         if cmp -s ${path}.new ${path}; then rm ${path}.new; else mv ${path}.new ${path}; echo changed; fi
         | CMD
-    }.any |$c| { $c }
+    }.any |$path, $spec| { $spec[2] }
 
     # 4. Service
     run_command($service['reload'], $t)

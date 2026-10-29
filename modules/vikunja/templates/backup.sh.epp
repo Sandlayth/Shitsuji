@@ -1,0 +1,29 @@
+<%- |
+  String  $dir,
+  String  $dest,
+  Integer $keep,
+| -%>
+#!/bin/sh
+# Managed by Shitsuji (vikunja). Run by cron: `vikunja dump` (database,
+# attachments, config) into <%= $dest %>, keeping <%= $keep %> days.
+# Restore, with the service stopped, as nobody from the data dir:
+#   vikunja --config <dir>/config.yml restore --preserve-config <zip>
+# and answer `Yes, I understand`. secret.env is copied alongside; without it
+# only existing logins are lost.
+set -e
+DIR=<%= $dir %>
+DEST=<%= $dest %>
+
+mkdir -p "$DEST" && chmod 700 "$DEST"
+exec >> "$DEST/backup.log" 2>&1
+stamp=$(date +%Y-%m-%d_%H%M)
+
+# dump runs as the service user, which can only write to the data dir
+rm -f "$DIR/data/backup-tmp.zip"
+su -s /bin/sh nobody -c "cd $DIR/data && $DIR/vikunja --config $DIR/config.yml dump -p $DIR/data -f backup-tmp" > /dev/null
+mv "$DIR/data/backup-tmp.zip" "$DEST/vikunja-$stamp.zip"
+chown root "$DEST/vikunja-$stamp.zip"
+cp "$DIR/secret.env" "$DEST/secret.env"
+
+find "$DEST" -name 'vikunja-*.zip' -mtime +<%= $keep %> -exec rm -f {} \;
+echo "$(date '+%F %T') vikunja-$stamp.zip $(wc -c < "$DEST/vikunja-$stamp.zip") bytes"

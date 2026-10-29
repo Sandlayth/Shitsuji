@@ -110,8 +110,21 @@ need futo tagged `tag:server` and approved as the services' host.
 - `/usr/local/etc/rc.d/vikunja.sh` starts it at boot under a small root loop
   that restarts it when it exits (also covers Tailscale not being up yet).
   Logs: `/usr/local/vikunja/data/vikunja.log`.
-- Back up `/usr/local/vikunja/data/vikunja.db` (+ `files/`) and `secret.env`;
-  with one disk, nothing else protects them.
+- **Backups**: `/etc/cron.d/vikunja-backup` (plain cron.d; DSM's `crond`
+  reads it, no DSM API) runs `/usr/local/vikunja/backup.sh` nightly at 03:30:
+  a `vikunja dump` zip (database as JSON, attachments, config) plus
+  `secret.env` into `/volume1/backups/vikunja`, 14 days kept, log in
+  `backup.log` there. Destination/retention/schedule are inventory vars.
+  Restore (tested 2026-10-29 into a scratch instance):
+  ```sh
+  /usr/local/etc/rc.d/vikunja.sh stop
+  cd /usr/local/vikunja/data && su -s /bin/sh nobody -c \
+    '/usr/local/vikunja/vikunja --config /usr/local/vikunja/config.yml restore --preserve-config <zip>'
+  # type: Yes, I understand
+  /usr/local/etc/rc.d/vikunja.sh start
+  ```
+  /volume1 is on the **same single disk** as md0: this covers mistakes and a
+  broken system partition, not a dead disk. Copy the dumps off the box too.
 
 ## Operating it
 
