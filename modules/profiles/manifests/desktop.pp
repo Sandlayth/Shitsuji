@@ -24,6 +24,9 @@ class profiles::desktop (
   # System-wide font defaults (readable, overridable Arabic).
   include profiles::fontconfig
 
+  # Per-user Thunderbird prefs (new-mail notifications via dunst).
+  include profiles::thunderbird
+
   $tiers.each |$tier| {
     profiles::install_packages { $tier:
       packages   => lookup($tier, { 'default_value' => [] }),
