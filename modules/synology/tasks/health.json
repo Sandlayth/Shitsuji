@@ -1,0 +1,6 @@
+{
+  "description": "Read-only health report of a Synology DSM box (RAID, SMART, space, kernel errors, NTP, Tailscale)",
+  "input_method": "environment",
+  "supports_noop": true,
+  "parameters": {}
+}
